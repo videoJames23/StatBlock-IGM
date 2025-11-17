@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     
     
     [Header("Player Stats")]
-    public float fSpeed = 10;
-    public float fJumpForce = 10f;
+    public float fPlayerSpeed = 10;
+    public float fPlayerJump = 10f;
     public int iPlayerHealth = 3;
     
     [Header("Enemy Stats")]

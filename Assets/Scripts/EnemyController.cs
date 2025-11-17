@@ -77,7 +77,7 @@ public class EnemyController : MonoBehaviour
             {
                 Debug.Log("Squash!");
                 iEnemyHealth--;
-                float fJumpForce = playerController.fJumpForce;
+                float fJumpForce = playerController.fPlayerJump;
                 playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fJumpForce);
                 if (iEnemyHealth <= 0)
                 {

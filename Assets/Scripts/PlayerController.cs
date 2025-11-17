@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -8,16 +9,21 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D playerRb;
     
-    [Header("Stats")]
-    public float fSpeed = 10;
-    public float fJumpForce = 10f;
-    public int iPlayerHealth = 3;
+    [FormerlySerializedAs("fSpeed")] [Header("Stats")]
+    public int iPlayerHealth;
+    public float fPlayerSpeed;
+    public float fPlayerJump;
+   
     
     private bool bIsGrounded;
     private float fIFramesDuration = 2;
     private int iNumberOfFlashes = 5;
     private SpriteRenderer cSpriteRenderer;
     public bool bInMenu;
+    public bool bIsTouchingStatBlock;
+    private StatBlockUI statBlockUI;
+    private float fBaseSpeed = 3;
+    private float fBaseJump = 3;
 
 
 
@@ -32,44 +38,65 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameObject statBlock = GameObject.FindGameObjectWithTag("StatBlock"); // find player
+        statBlockUI = statBlock.GetComponent<StatBlockUI>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        // movement
+        //menu pausing
         if (bInMenu)
         {
-            fSpeed = 0;
+            fPlayerSpeed = 0;
+            fPlayerJump = 0;
+            bIsGrounded = true;
         }
         else
         {
-            fSpeed = 10;
+            fPlayerSpeed = statBlockUI.stats[1] * 2 + fBaseSpeed;
+            fPlayerJump = statBlockUI.stats[2] * 2 + fBaseJump;
         }
-        playerRb.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * fSpeed, playerRb.linearVelocity.y);
+        playerRb.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * fPlayerSpeed, playerRb.linearVelocity.y);
         
         // jump
         if (Input.GetKeyDown("space") && bIsGrounded)
         {
-            playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fJumpForce);
+            playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fPlayerJump);
         }
+        
+        if (bIsTouchingStatBlock && Input.GetKeyDown(KeyCode.E))
+        {
+            bInMenu = !bInMenu;
+        }
+
+        iPlayerHealth = statBlockUI.stats[0];
+        
+        
 
     }
 
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            Console.WriteLine("Level Complete!");
+        }
+    }
    
-    
-    // grounding checks
     void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             bIsGrounded = true;
         }
-        else if (other.gameObject.CompareTag("StatBlock") && Input.GetKeyDown(KeyCode.E))
+        else if (other.gameObject.CompareTag("StatBlock"))
         {
-            bInMenu = !bInMenu;
+            bIsTouchingStatBlock = true;
         }
+        
     }
 
     void OnCollisionExit2D(Collision2D other)
@@ -77,6 +104,10 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             bIsGrounded = false;
+        }
+        else if (other.gameObject.CompareTag("StatBlock"))
+        {
+            bIsTouchingStatBlock = false;
         }
     }
     
