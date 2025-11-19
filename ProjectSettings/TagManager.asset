@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - StatBlock
   - Objective
+  - Holder
   layers:
   - Default
   - TransparentFX

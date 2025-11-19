@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     public PlayerController playerController;
 
     public float fEnemySpeed = 5;
-
+    public float fEnemyBaseSpeed = 5;
     public int iEnemyHealth = 3;
 
 
@@ -36,7 +36,7 @@ public class EnemyController : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
         {
-            fEnemySpeed *= -1;
+            fEnemyBaseSpeed *= -1;
         }
 
         if (other.gameObject.tag == "Player")

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public int iPlayerHealth;
     public float fPlayerSpeed;
     public float fPlayerJump;
-   
+    
     
     private bool bIsGrounded;
     private float fIFramesDuration = 2;
@@ -22,55 +23,58 @@ public class PlayerController : MonoBehaviour
     public bool bInMenu;
     public bool bIsTouchingStatBlock;
     private StatBlockUI statBlockUI;
+    private EnemyController enemyController;
     private float fBaseSpeed = 3;
     private float fBaseJump = 3;
 
 
 
-    void Awake()
-    {
-        playerRb = GetComponent<Rigidbody2D>();
-        cSpriteRenderer = GetComponent<SpriteRenderer>();
-
-    }
-
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
-        GameObject statBlock = GameObject.FindGameObjectWithTag("StatBlock"); // find player
+    {   
+        playerRb = GetComponent<Rigidbody2D>();
+        cSpriteRenderer = GetComponent<SpriteRenderer>();
+        
+        GameObject statBlock = GameObject.FindGameObjectWithTag("StatBlock");
         statBlockUI = statBlock.GetComponent<StatBlockUI>();
+        
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemyController = enemy.GetComponent<EnemyController>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        //menu pausing
+        if (bIsTouchingStatBlock && Input.GetKeyDown(KeyCode.E))
+        {
+            bInMenu = !bInMenu;
+        }
+        
         if (bInMenu)
         {
             fPlayerSpeed = 0;
             fPlayerJump = 0;
             bIsGrounded = true;
+            enemyController.fEnemySpeed = 0;
         }
         else
         {
-            fPlayerSpeed = statBlockUI.stats[1] * 2 + fBaseSpeed;
-            fPlayerJump = statBlockUI.stats[2] * 2 + fBaseJump;
+            
+            fPlayerSpeed = (statBlockUI.stats[1] * fBaseSpeed);
+            fPlayerJump = (statBlockUI.stats[2] * fBaseJump);
+            enemyController.fEnemySpeed = enemyController.fEnemyBaseSpeed;
         }
         playerRb.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * fPlayerSpeed, playerRb.linearVelocity.y);
         
-        // jump
+        
         if (Input.GetKeyDown("space") && bIsGrounded)
         {
             playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fPlayerJump);
         }
         
-        if (bIsTouchingStatBlock && Input.GetKeyDown(KeyCode.E))
-        {
-            bInMenu = !bInMenu;
-        }
-
         iPlayerHealth = statBlockUI.stats[0];
         
         
@@ -78,9 +82,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (collision.gameObject.CompareTag("Finish"))
+        if (other.gameObject.CompareTag("Finish"))
         {
             Console.WriteLine("Level Complete!");
         }
@@ -116,7 +120,10 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
         {
             iPlayerHealth -= damage;
-            
+            statBlockUI.stats[0]--;
+            statBlockUI.iPointsTotal--;
+            statBlockUI.iPointsLeft = statBlockUI.iPointsTotal - statBlockUI.stats.Sum();
+            statBlockUI.UpdateUI();
             // I-frames
             if (iPlayerHealth > 0)
             {
@@ -132,7 +139,7 @@ public class PlayerController : MonoBehaviour
     {
         Physics2D.IgnoreLayerCollision(10, 11, true);
         
-        // flashes
+      
         for (int i = 0; i < iNumberOfFlashes; i++)
         {
             cSpriteRenderer.color = new Color(0, 0.25f, 1, 0.5f);

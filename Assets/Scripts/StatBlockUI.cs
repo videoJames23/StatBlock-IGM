@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.Serialization;
 
 public class StatBlockUI : MonoBehaviour
@@ -8,17 +9,18 @@ public class StatBlockUI : MonoBehaviour
     public TextMeshProUGUI[] valueTexts;
 
    
-    [FormerlySerializedAs("values")] public int[] stats = { 1, 2, 1};
+    [FormerlySerializedAs("values")] public int[] stats = {1, 2, 1};
     private int selectedIndex;
     public PlayerController playerController;
-    public int iPointsLeft;
     public int iPointsTotal;
+    public int iPointsLeft;
+    public bool bNoPoints;
 
 
     
     void Start()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); // find player
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
         iPointsTotal = 9;
         iPointsLeft = iPointsTotal - stats.Sum();
@@ -27,13 +29,16 @@ public class StatBlockUI : MonoBehaviour
 
     void Update()
     {
-        
-        if (playerController.bInMenu)
+        if (iPointsLeft == 0)
         {
+            bNoPoints = true;
+        }
+        if (playerController.bInMenu)
+        { 
+            
 
-
-            // Move selection UP visually
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            // select stat
+            if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
             {
                 selectedIndex--;
                 if (selectedIndex < 0)
@@ -42,8 +47,8 @@ public class StatBlockUI : MonoBehaviour
                 UpdateUI();
             }
 
-            // Move selection DOWN visually
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow)|| Input.GetKeyDown(KeyCode.S))
             {
                 selectedIndex++;
                 if (selectedIndex >= stats.Length)
@@ -53,8 +58,8 @@ public class StatBlockUI : MonoBehaviour
                 UpdateUI();
             }
 
-            // Increase value
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            // change value
+            if ((Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.D)) && iPointsLeft > 0)
             {
                 stats[selectedIndex]++;
 
@@ -65,9 +70,8 @@ public class StatBlockUI : MonoBehaviour
 
                 UpdateUI();
             }
-
-            // Decrease value
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            
+            if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.A))
             {
                 stats[selectedIndex]--;
 
@@ -94,14 +98,21 @@ public class StatBlockUI : MonoBehaviour
         }
     }
 
-    void UpdateUI()
+    public void UpdateUI()
     {
         for (int i = 0; i < valueTexts.Length - 1; i++)
         {
             valueTexts[i].text = stats[i].ToString();
             valueTexts[3].text = iPointsLeft.ToString();
 
-            valueTexts[i].color = (i == selectedIndex) ? Color.yellow : Color.white;
+            if (playerController.bInMenu)
+            {
+                valueTexts[i].color = (i == selectedIndex) ? Color.green : Color.white;
+            }
+            else
+            {
+                valueTexts[i].color = Color.white;
+            }
         }
     }
 }
