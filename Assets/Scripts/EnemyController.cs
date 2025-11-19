@@ -10,7 +10,6 @@ public class EnemyController : MonoBehaviour
     public PlayerController playerController;
 
     public float fEnemySpeed = 5;
-    public float fEnemyBaseSpeed = 5;
     public int iEnemyHealth = 3;
 
 
@@ -30,13 +29,21 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         enemyRb.linearVelocity = new Vector2(1 * fEnemySpeed, enemyRb.linearVelocity.y);
+        if (playerController.bInMenu)
+        {
+            enemyRb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        else if (!playerController.bInMenu)
+        {
+            enemyRb.constraints = RigidbodyConstraints2D.None;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Wall")
         {
-            fEnemyBaseSpeed *= -1;
+            fEnemySpeed *= -1;
         }
 
         if (other.gameObject.tag == "Player")

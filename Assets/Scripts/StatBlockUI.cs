@@ -9,12 +9,11 @@ public class StatBlockUI : MonoBehaviour
     public TextMeshProUGUI[] valueTexts;
 
    
-    [FormerlySerializedAs("values")] public int[] stats = {1, 2, 1};
+    public int[] stats = {1, 1, 1};
     private int selectedIndex;
     public PlayerController playerController;
     public int iPointsTotal;
     public int iPointsLeft;
-    public bool bNoPoints;
 
 
     
@@ -22,17 +21,14 @@ public class StatBlockUI : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
-        iPointsTotal = 9;
+        iPointsTotal = 5;
         iPointsLeft = iPointsTotal - stats.Sum();
         UpdateUI();
     }
 
     void Update()
     {
-        if (iPointsLeft == 0)
-        {
-            bNoPoints = true;
-        }
+        
         if (playerController.bInMenu)
         { 
             

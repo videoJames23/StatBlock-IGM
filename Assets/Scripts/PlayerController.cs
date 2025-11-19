@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private Rigidbody2D playerRb;
+    private Rigidbody2D enemyRb;
     
     [FormerlySerializedAs("fSpeed")] [Header("Stats")]
     public int iPlayerHealth;
@@ -16,17 +17,18 @@ public class PlayerController : MonoBehaviour
     public float fPlayerJump;
     
     
+    
+    public bool bIsTouchingStatBlock;
+    public bool bInMenu;
     private bool bIsGrounded;
+    
     private float fIFramesDuration = 2;
     private int iNumberOfFlashes = 5;
-    private SpriteRenderer cSpriteRenderer;
-    public bool bInMenu;
-    public bool bIsTouchingStatBlock;
+    
     private StatBlockUI statBlockUI;
     private EnemyController enemyController;
-    private float fBaseSpeed = 3;
-    private float fBaseJump = 3;
-
+    private SpriteRenderer cSpriteRenderer;
+    
 
 
     
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
         
         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
         enemyController = enemy.GetComponent<EnemyController>();
+        enemyRb =  enemy.GetComponent<Rigidbody2D>();
 
     }
 
@@ -51,22 +54,40 @@ public class PlayerController : MonoBehaviour
         if (bIsTouchingStatBlock && Input.GetKeyDown(KeyCode.E))
         {
             bInMenu = !bInMenu;
+            statBlockUI.UpdateUI();
         }
         
         if (bInMenu)
         {
-            fPlayerSpeed = 0;
-            fPlayerJump = 0;
-            bIsGrounded = true;
-            enemyController.fEnemySpeed = 0;
-        }
-        else
-        {
             
-            fPlayerSpeed = (statBlockUI.stats[1] * fBaseSpeed);
-            fPlayerJump = (statBlockUI.stats[2] * fBaseJump);
-            enemyController.fEnemySpeed = enemyController.fEnemyBaseSpeed;
+            playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
+            
+            bIsTouchingStatBlock = true;
         }
+        else if (!bInMenu)
+        {
+            playerRb.constraints = RigidbodyConstraints2D.None;
+            
+        }
+
+        switch (statBlockUI.stats[1]) // speeds
+            {
+                case 0: fPlayerSpeed = 0; break;
+                case 1: fPlayerSpeed = 3; break;
+                case 2: fPlayerSpeed = 7; break;
+                case 3: fPlayerSpeed = 10; break;
+            }
+
+            switch (statBlockUI.stats[2]) //jump heights
+            {
+                case 0: fPlayerJump = 0; break;
+                case 1: fPlayerJump = 5; break;
+                case 2: fPlayerJump = 7; break;
+                case 3: fPlayerJump = 9; break;
+            }
+            
+    
+        
         playerRb.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * fPlayerSpeed, playerRb.linearVelocity.y);
         
         
@@ -82,34 +103,44 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void OnCollisionEnter2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Finish"))
-        {
-            Console.WriteLine("Level Complete!");
+        {  
+            Debug.Log("Level Complete!");
         }
     }
-   
     void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             bIsGrounded = true;
         }
-        else if (other.gameObject.CompareTag("StatBlock"))
-        {
-            bIsTouchingStatBlock = true;
-        }
+        
         
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("StatBlock"))
+        {
+            bIsTouchingStatBlock = true;
+        }
+    }
+   
+    
     void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
             bIsGrounded = false;
         }
-        else if (other.gameObject.CompareTag("StatBlock"))
+        
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("StatBlock"))
         {
             bIsTouchingStatBlock = false;
         }
