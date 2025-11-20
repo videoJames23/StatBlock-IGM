@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private Rigidbody2D playerRb;
-    private Rigidbody2D enemyRb;
+    
     
     [FormerlySerializedAs("fSpeed")] [Header("Stats")]
     public int iPlayerHealth;
@@ -18,11 +18,14 @@ public class PlayerController : MonoBehaviour
     
     
     
-    public bool bIsTouchingStatBlock;
+    public bool bIsTouchingStatBlockP;
+    public bool bIsTouchingStatBlockE;
     public bool bInMenu;
+    public bool bInMenuP;
+    public bool bInMenuE;
     private bool bIsGrounded;
     
-    private float fIFramesDuration = 2;
+    private float fIFramesDuration = 1;
     private int iNumberOfFlashes = 5;
     
     private StatBlockUI statBlockUI;
@@ -39,52 +42,44 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody2D>();
         cSpriteRenderer = GetComponent<SpriteRenderer>();
         
-        GameObject statBlock = GameObject.FindGameObjectWithTag("StatBlock");
-        statBlockUI = statBlock.GetComponent<StatBlockUI>();
+        GameObject statBlockP = GameObject.FindGameObjectWithTag("StatBlockP");
+        statBlockUI = statBlockP.GetComponent<StatBlockUI>();
         
         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
         enemyController = enemy.GetComponent<EnemyController>();
-        enemyRb =  enemy.GetComponent<Rigidbody2D>();
+        
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (bIsTouchingStatBlock && Input.GetKeyDown(KeyCode.E))
+        if (bIsTouchingStatBlockP && Input.GetKeyDown(KeyCode.E))
         {
-            bInMenu = !bInMenu;
+            bInMenuP = !bInMenuP;
             statBlockUI.UpdateUI();
         }
         
-        if (bInMenu)
+        if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && !bInMenuE)
         {
-            
-            playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
-            
-            bIsTouchingStatBlock = true;
+            bInMenuE = true;
+            statBlockUI.UpdateUI();
         }
-        else if (!bInMenu)
+        else if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && bInMenuE && statBlockUI.iPointsLeftE == 0)
         {
-            playerRb.constraints = RigidbodyConstraints2D.None;
+            bInMenuE = false;
+        }
+        if (bInMenuP || bInMenuE)
+        {
+            bInMenu = true;
+
+        }
+        else if (!bInMenuP && !bInMenuE)
+        {
+            bInMenu = false;
             
         }
-
-        switch (statBlockUI.stats[1]) // speeds
-            {
-                case 0: fPlayerSpeed = 0; break;
-                case 1: fPlayerSpeed = 3; break;
-                case 2: fPlayerSpeed = 7; break;
-                case 3: fPlayerSpeed = 10; break;
-            }
-
-            switch (statBlockUI.stats[2]) //jump heights
-            {
-                case 0: fPlayerJump = 0; break;
-                case 1: fPlayerJump = 5; break;
-                case 2: fPlayerJump = 7; break;
-                case 3: fPlayerJump = 9; break;
-            }
+        
             
     
         
@@ -95,10 +90,6 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fPlayerJump);
         }
-        
-        iPlayerHealth = statBlockUI.stats[0];
-        
-        
 
     }
 
@@ -122,9 +113,13 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("StatBlock"))
+        if (other.gameObject.CompareTag("StatBlockP"))
         {
-            bIsTouchingStatBlock = true;
+            bIsTouchingStatBlockP = true;
+        }
+        else if (other.gameObject.CompareTag("StatBlockE"))
+        {
+            bIsTouchingStatBlockE = true;
         }
     }
    
@@ -140,9 +135,13 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("StatBlock"))
+        if (other.gameObject.CompareTag("StatBlockP"))
         {
-            bIsTouchingStatBlock = false;
+            bIsTouchingStatBlockP = false;
+        }
+        if (other.gameObject.CompareTag("StatBlockE"))
+        {
+            bIsTouchingStatBlockE = false;
         }
     }
     
@@ -151,9 +150,9 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
         {
             iPlayerHealth -= damage;
-            statBlockUI.stats[0]--;
-            statBlockUI.iPointsTotal--;
-            statBlockUI.iPointsLeft = statBlockUI.iPointsTotal - statBlockUI.stats.Sum();
+            statBlockUI.statsP[0]--;
+            statBlockUI.iPointsTotalP--;
+            statBlockUI.iPointsLeftP = statBlockUI.iPointsTotalP - statBlockUI.statsP.Sum();
             statBlockUI.UpdateUI();
             // I-frames
             if (iPlayerHealth > 0)

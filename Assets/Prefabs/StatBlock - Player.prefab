@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7176535918135753456}
   - component: {fileID: 5583514244488709731}
   - component: {fileID: 5135436875863202051}
-  - component: {fileID: 7535843566891685091}
+  - component: {fileID: 5477954982717185813}
   m_Layer: 0
   m_Name: StatBlock - Player
   m_TagString: StatBlock
@@ -118,7 +118,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -134,7 +134,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7535843566891685091
+--- !u!114 &5477954982717185813
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,8 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262d6967e1c149e47b1801719a140f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  valueTexts: []
-  stats: 010000000200000001000000
+  valueTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  stats: 010000000100000001000000
   playerController: {fileID: 0}
-  iPointsLeft: 0
   iPointsTotal: 0
+  iPointsLeft: 0

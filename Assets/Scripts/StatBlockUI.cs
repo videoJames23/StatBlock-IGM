@@ -9,11 +9,19 @@ public class StatBlockUI : MonoBehaviour
     public TextMeshProUGUI[] valueTexts;
 
    
-    public int[] stats = {1, 1, 1};
+    public int[] statsP = {1, 1, 1};
+    public int[] statsE = {1, 1, 1};
     private int selectedIndex;
     public PlayerController playerController;
-    public int iPointsTotal;
-    public int iPointsLeft;
+    public EnemyController enemyController;
+    public ShowHide showHideJ;
+    public ShowHide showHideS;
+    
+ 
+    public int iPointsTotalP;
+    public int iPointsLeftP;
+    public int iPointsTotalE;
+    public int iPointsLeftE;
 
 
     
@@ -21,8 +29,20 @@ public class StatBlockUI : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
-        iPointsTotal = 5;
-        iPointsLeft = iPointsTotal - stats.Sum();
+        
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemyController = enemy.GetComponent<EnemyController>();
+        
+        GameObject size = GameObject.FindGameObjectWithTag("Size");
+        GameObject jump = GameObject.FindGameObjectWithTag("Jump");
+        showHideS = size.GetComponent<ShowHide>();
+        showHideJ = jump.GetComponent<ShowHide>();
+        
+    
+        iPointsTotalP = 5;
+        iPointsTotalE = 5;
+        iPointsLeftP = iPointsTotalP - statsP.Sum();
+        iPointsLeftE = iPointsLeftP - statsE.Sum();
         UpdateUI();
     }
 
@@ -37,8 +57,14 @@ public class StatBlockUI : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
             {
                 selectedIndex--;
-                if (selectedIndex < 0)
-                    selectedIndex = stats.Length - 1;
+                if (selectedIndex < 0 && playerController.bInMenuP)
+                {
+                    selectedIndex = statsP.Length - 1;
+                }
+                else if (selectedIndex < 0 && playerController.bInMenuE)
+                {
+                    selectedIndex = statsE.Length - 1;
+                }
 
                 UpdateUI();
             }
@@ -47,49 +73,89 @@ public class StatBlockUI : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.DownArrow)|| Input.GetKeyDown(KeyCode.S))
             {
                 selectedIndex++;
-                if (selectedIndex >= stats.Length)
+                if (selectedIndex >= statsP.Length && playerController.bInMenuP)
+                {
                     selectedIndex = 0;
-                
+                }
+                else if (selectedIndex >= statsE.Length && playerController.bInMenuE)
+                {
+                    selectedIndex = 0;
+                }
 
                 UpdateUI();
             }
 
             // change value
-            if ((Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.D)) && iPointsLeft > 0)
+            if (Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.D))
             {
-                stats[selectedIndex]++;
-
-                if (stats[selectedIndex] > 3)
+                if (playerController.bInMenuP && iPointsLeftP > 0)
                 {
-                    stats[selectedIndex] = 3;
-                }
+                    statsP[selectedIndex]++;
 
+                    if (statsP[selectedIndex] > 3)
+                    {
+                        statsP[selectedIndex] = 3;
+                    }
+                }
+                else if (playerController.bInMenuE && iPointsLeftE > 0)
+                {
+                    statsE[selectedIndex]++;
+
+                    if (statsE[selectedIndex] > 3)
+                    {
+                        statsE[selectedIndex] = 3;
+                    }
+                }
                 UpdateUI();
             }
             
             if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.A))
             {
-                stats[selectedIndex]--;
-
-                if (stats[0] < 1)
+                if (playerController.bInMenuP)
                 {
-                    stats[0] = 1;
+                    statsP[selectedIndex]--;
+
+                    if (statsP[0] < 1)
+                    {
+                        statsP[0] = 1;
+                    }
+
+                    else if (statsP[1] < 0)
+                    {
+                        statsP[1] = 0;
+                    }
+
+                    else if (statsP[2] < 0)
+                    {
+                        statsP[2] = 0;
+                    }
                 }
-
-                else if (stats[1] < 0)
+                else if (playerController.bInMenuE)
                 {
-                    stats[1] = 0;
-                }
+                    statsE[selectedIndex]--;
 
-                else if (stats[2] < 0)
-                {
-                    stats[2] = 0;
+                    if (statsE[0] < 1)
+                    {
+                        statsE[0] = 1;
+                    }
+
+                    else if (statsE[1] < 0)
+                    {
+                        statsE[1] = 0;
+                    }
+
+                    else if (statsE[2] < 1)
+                    {
+                        statsE[2] = 1;
+                    }
                 }
 
                 UpdateUI();
             }
-
-            iPointsLeft = iPointsTotal - stats.Sum();
+            
+            iPointsLeftP = iPointsTotalP - statsP.Sum();
+            iPointsLeftE = iPointsTotalE - statsE.Sum();
+            
             UpdateUI();
         }
     }
@@ -98,10 +164,24 @@ public class StatBlockUI : MonoBehaviour
     {
         for (int i = 0; i < valueTexts.Length - 1; i++)
         {
-            valueTexts[i].text = stats[i].ToString();
-            valueTexts[3].text = iPointsLeft.ToString();
-
-            if (playerController.bInMenu)
+            if (playerController.bInMenuP)
+            {
+                valueTexts[i].text = statsP[i].ToString();
+                valueTexts[3].text = iPointsLeftP.ToString();
+                showHideJ.Show();
+                showHideS.Hide();
+            }
+            
+            else if (playerController.bInMenuE)
+            {
+                valueTexts[i].text = statsE[i].ToString();
+                valueTexts[3].text = iPointsLeftE.ToString();
+                showHideJ.Hide();
+                showHideS.Show();
+                
+            }
+            
+            if (playerController.bInMenuP || playerController.bInMenuE)
             {
                 valueTexts[i].color = (i == selectedIndex) ? Color.green : Color.white;
             }

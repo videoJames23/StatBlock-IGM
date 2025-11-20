@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,9 +10,16 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D enemyRb;
     private Rigidbody2D playerRb;
     public PlayerController playerController;
+ 
 
-    public float fEnemySpeed = 5;
+    
     public int iEnemyHealth = 3;
+    public float fEnemySpeed = 5;
+    public float fEnemySize = 1.5f;
+    public float fEnemyDir = 1;
+    
+    private StatBlockUI statBlockUI;
+    
 
 
 
@@ -18,32 +27,31 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         enemyRb = GetComponent<Rigidbody2D>();
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); // find player
-        playerRb = player.GetComponent<Rigidbody2D>(); // find player's rigidbody
+        
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        playerRb = player.GetComponent<Rigidbody2D>();
         playerController = player.GetComponent<PlayerController>();
+        
+        GameObject statBlockE = GameObject.FindGameObjectWithTag("StatBlockE");
+        statBlockUI = statBlockE.GetComponent<StatBlockUI>();
         
 
     }
 
     // Update is called once per frame
     void Update()
-    {
-        enemyRb.linearVelocity = new Vector2(1 * fEnemySpeed, enemyRb.linearVelocity.y);
-        if (playerController.bInMenu)
-        {
-            enemyRb.constraints = RigidbodyConstraints2D.FreezeAll;
-        }
-        else if (!playerController.bInMenu)
-        {
-            enemyRb.constraints = RigidbodyConstraints2D.None;
-        }
+    {   
+        
+        
+        enemyRb.linearVelocity = new Vector2(fEnemySpeed, enemyRb.linearVelocity.y);
+        enemyRb.transform.localScale = new Vector2(fEnemySize, fEnemySize);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Wall")
         {
-            fEnemySpeed *= -1;
+            fEnemyDir *= -1;
         }
 
         if (other.gameObject.tag == "Player")
@@ -83,13 +91,10 @@ public class EnemyController : MonoBehaviour
             if (playerIsAbove)
             {
                 Debug.Log("Squash!");
-                iEnemyHealth--;
+                TakeDamage(1);
                 float fJumpForce = playerController.fPlayerJump;
                 playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fJumpForce);
-                if (iEnemyHealth <= 0)
-                {
-                    Destroy(gameObject);
-                }
+                
             }
             else
             {
@@ -97,6 +102,24 @@ public class EnemyController : MonoBehaviour
                 playerController.TakeDamage(1);
             }
 
+        }
+    }
+    public void TakeDamage(int damage)
+    {
+        
+        statBlockUI.statsE[0]--;
+        iEnemyHealth = statBlockUI.statsE[0];
+        statBlockUI.iPointsTotalE--;
+        statBlockUI.iPointsLeftE = statBlockUI.iPointsTotalE - statBlockUI.statsE.Sum();
+
+        playerController.bInMenuE = true;
+        statBlockUI.UpdateUI();
+        playerController.bInMenuE = false;
+        
+        // I-frames
+        if (iEnemyHealth <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 

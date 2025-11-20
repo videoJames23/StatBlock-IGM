@@ -47,10 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac79e51691b7d0418619bd7141bf9fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bIsGrounded: 0
-  fSpeed: 10
-  fJumpForce: 5
   iPlayerHealth: 3
+  fPlayerSpeed: 0
+  fPlayerJump: 0
+  bIsTouchingStatBlock: 0
+  bInMenu: 0
 --- !u!212 &8678867525025807306
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -168,4 +169,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
