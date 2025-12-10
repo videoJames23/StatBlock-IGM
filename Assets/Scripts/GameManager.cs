@@ -22,10 +22,14 @@ public class GameManager : MonoBehaviour
         GameObject statBlockUI = GameObject.FindGameObjectWithTag("StatBlockUI");
         this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
         
-        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-        enemyRb =  enemy.GetComponent<Rigidbody2D>();
-        enemyController = enemy.GetComponent<EnemyController>();
         
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+        if (enemy != null)
+        {
+            enemyRb = enemy.GetComponent<Rigidbody2D>();
+            enemyController = enemy.GetComponent<EnemyController>();
+        }
+
         StatChangeP();
         StatChangeE();
         

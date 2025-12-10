@@ -32,8 +32,7 @@ public class PlayerController : MonoBehaviour
     private GameManager gameManagerScript;
     private EnemyController enemyController;
     private SpriteRenderer cSpriteRenderer;
-
-    private GameObject completionAudio;
+    
     private AudioSource audioSource;
     
 
@@ -50,49 +49,48 @@ public class PlayerController : MonoBehaviour
         this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
         
         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-        enemyController = enemy.GetComponent<EnemyController>();
+        if (enemy != null)
+        {
+            enemyController = enemy.GetComponent<EnemyController>();
+        }
+        
         
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         
         GameObject completionAudio = GameObject.FindGameObjectWithTag("Completion Audio");
-        audioSource = completionAudio.GetComponent<AudioSource>();
+        if (completionAudio != null)
+        {
+            audioSource = completionAudio.GetComponent<AudioSource>();
+        }
+
+        GameObject spikes = GameObject.FindGameObjectWithTag("Spikes");
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (bIsTouchingStatBlockP && Input.GetKeyDown(KeyCode.E))
         {
             bInMenuP = !bInMenuP;
-            if (bInMenuP)
-            {
-                statBlockUI.sUser = "Player";
-            }
-            statBlockUI.UpdateUI();
+            MenuChecks();
         }
         
         if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && !bInMenuE)
         {
             bInMenuE = true;
-            statBlockUI.sUser = "Enemy";
-            statBlockUI.UpdateUI();
+            MenuChecks();
         }
+        
         else if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && bInMenuE && statBlockUI.iPointsLeftE == 0)
         {
             bInMenuE = false;
-            statBlockUI.UpdateUI();
+            MenuChecks();
         }
-        if (bInMenuP || bInMenuE)
-        {
-            bInMenu = true;
-
-        }
-        else if (!bInMenuP && !bInMenuE)
-        {
-            bInMenu = false;
-            
-        }
+        
+        
+        
         
             
     
@@ -113,6 +111,14 @@ public class PlayerController : MonoBehaviour
         playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fPlayerJump);
     }
 
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Spike"))
+        {
+                TakeDamage(1);
+        }
+    }
     private IEnumerator OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Finish"))
@@ -122,6 +128,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(4);
             gameManagerScript.LoadScene();
         }
+        
     }
     void OnCollisionStay2D(Collision2D other)
     {
@@ -165,6 +172,20 @@ public class PlayerController : MonoBehaviour
         {
             bIsTouchingStatBlockE = false;
         }
+    }
+
+    void MenuChecks()
+    {
+        if (bInMenuP || bInMenuE)
+        {
+            bInMenu = true;
+        }
+        
+        else if (!bInMenuP && !bInMenuE)
+        {
+            bInMenu = false;
+        }
+        statBlockUI.UpdateUI();
     }
     
     

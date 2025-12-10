@@ -12,9 +12,14 @@ public class StatBlockUI : MonoBehaviour
     public int[] statsP = {1, 1, 1};
     public int[] statsE = {1, 1, 1};
     private int selectedIndex;
+    
     public PlayerController playerController;
     public EnemyController enemyController;
     public GameManager gameManagerScript;
+
+    public GameObject holder;
+    public GameObject background;
+    
     public ShowHide showHideJ;
     public ShowHide showHideS;
     
@@ -33,10 +38,17 @@ public class StatBlockUI : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
         
         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-        enemyController = enemy.GetComponent<EnemyController>();
+        if (enemy != null)
+        {
+            enemyController = enemy.GetComponent<EnemyController>();
+        }
+        
         
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
+        
+        holder = GameObject.FindGameObjectWithTag("Holder");
+        background = GameObject.Find("Background");
         
         GameObject size = GameObject.FindGameObjectWithTag("Size");
         GameObject jump = GameObject.FindGameObjectWithTag("Jump");
@@ -56,7 +68,7 @@ public class StatBlockUI : MonoBehaviour
 
 
         iPointsLeftP = iPointsTotalP - statsP.Sum();
-        iPointsLeftE = iPointsLeftP - statsE.Sum();
+        iPointsLeftE = iPointsTotalE - statsE.Sum();
         UpdateUI();
     }
 
@@ -183,7 +195,7 @@ public class StatBlockUI : MonoBehaviour
 
 
 
-                UpdateUI();
+                
             }
         }
     }
@@ -193,6 +205,21 @@ public class StatBlockUI : MonoBehaviour
         iPointsLeftP = iPointsTotalP - statsP.Sum();
         iPointsLeftE = iPointsTotalE - statsE.Sum();
         
+        if (playerController.bInMenu)
+        {
+            holder.GetComponent<RectTransform>().anchoredPosition =
+                new Vector2(-87.6f, -74.2f);
+            holder.GetComponent<RectTransform>().localScale= new Vector3(3f, 3f, 3f);
+            background.GetComponent<RectTransform>().localScale = new Vector3(4.42999983f,2.30865788f,1f);
+        }
+        else if (!playerController.bInMenu)
+        {
+            holder.GetComponent<RectTransform>().anchoredPosition =
+                new Vector2(-409.7f, 192.1f);
+            holder.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            background.GetComponent<RectTransform>().localScale = new Vector3(2.82999992f,2.30865788f,1f);
+        }
+
         for (int i = 0; i < valueTexts.Length - 2; i++)
         {
             if (playerController == null)
@@ -208,6 +235,8 @@ public class StatBlockUI : MonoBehaviour
                     valueTexts[3].text = iPointsLeftP.ToString();
                     showHideJ.Show();
                     showHideS.Hide();
+                    sUser = "Player";
+                    
                     
                 }
 
@@ -217,6 +246,7 @@ public class StatBlockUI : MonoBehaviour
                     valueTexts[3].text = iPointsLeftE.ToString();
                     showHideJ.Hide();
                     showHideS.Show();
+                    sUser = "Enemy";
 
                 }
 

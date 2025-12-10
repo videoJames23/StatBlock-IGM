@@ -17,6 +17,10 @@ TagManager:
   - GameManager
   - StatBlockUI
   - Completion Audio
+  - Background
+  - Spike
+  - Spikes
+  - Triangle
   layers:
   - Default
   - TransparentFX

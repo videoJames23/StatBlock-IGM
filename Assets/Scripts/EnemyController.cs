@@ -48,7 +48,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Wall")
+        if (other.gameObject.CompareTag("Wall"))
         {
             if (Mathf.Abs(enemyRb.linearVelocity.x) < 0.1f)
             {
@@ -56,7 +56,7 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {  
             // // alternate jump detector using maths :3
             // // ((px x ex) + (py + ey))/|p||e| = cosangle
@@ -125,17 +125,10 @@ public class EnemyController : MonoBehaviour
         }
         statBlockUI.iPointsTotalE--;
         statBlockUI.iPointsLeftE = statBlockUI.iPointsTotalE - statBlockUI.statsE.Sum();
-        if (playerController == null)
-        {
-                
-        }
 
-        else
-        {
-            playerController.bInMenuE = true;
-            statBlockUI.UpdateUI();
-            playerController.bInMenuE = false;
-        }
+        statBlockUI.UpdateUI();
+            
+        
 
         // I-frames
         if (iEnemyHealth <= 0)
