@@ -124,6 +124,9 @@ public class GameManager : MonoBehaviour
 
         else
         {
+            
+            enemyController.iEnemyHealth = statBlockUI.statsE[0];
+            
             switch (statBlockUI.statsE[1]) // enemy speeds
             {
                 case 0: enemyController.fEnemySpeed = 0; break;

@@ -55,6 +55,8 @@ public class StatBlockUI : MonoBehaviour
         showHideS = size.GetComponent<ShowHide>();
         showHideJ = jump.GetComponent<ShowHide>();
 
+        selectedIndex = 0;
+
 
         for (int i = 0; i < valueTexts.Length; i++)
         {

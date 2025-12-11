@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     public bool bInMenuP;
     public bool bInMenuE;
     private bool bIsGrounded;
+    private bool bCanTakeDamage = true;
+
+    
     
     private float fIFramesDuration = 1;
     private int iNumberOfFlashes = 5;
@@ -65,6 +68,8 @@ public class PlayerController : MonoBehaviour
         }
 
         GameObject spikes = GameObject.FindGameObjectWithTag("Spikes");
+        
+        Physics2D.IgnoreLayerCollision(10, 11, false);
     }
 
     // Update is called once per frame
@@ -192,17 +197,23 @@ public class PlayerController : MonoBehaviour
     // Damage/I-Frames
     public void TakeDamage(int damage)
         {
+            if (!bCanTakeDamage)
+            {
+                return;
+            }
+        
+            bCanTakeDamage = false;
+            
             iPlayerHealth -= damage;
             statBlockUI.statsP[0]--;
-            if (statBlockUI.iPointsLeftP > 0)
-            {
-                statBlockUI.iPointsLeftP--;
-            }
+            
             statBlockUI.iPointsTotalP--;
             statBlockUI.iPointsLeftP = statBlockUI.iPointsTotalP - statBlockUI.statsP.Sum();
+            
             bInMenuP = true;
             statBlockUI.UpdateUI();
             bInMenuP = false;
+            
             // I-frames
             if (iPlayerHealth > 0)
             {
@@ -228,6 +239,7 @@ public class PlayerController : MonoBehaviour
         }
         
         Physics2D.IgnoreLayerCollision(10, 11, false);
+        bCanTakeDamage = true;
     }
 
 }

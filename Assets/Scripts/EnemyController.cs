@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
@@ -6,19 +7,24 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-
+    private GameManager gameManagerScript;
     private Rigidbody2D enemyRb;
     private Rigidbody2D playerRb;
     public PlayerController playerController;
  
+    private SpriteRenderer cSpriteRenderer;
 
     
     public int iEnemyHealth;
     public float fEnemySpeed;
     public float fEnemySize;
     public float fEnemyDir;
+    public int iDamage;
     
     private StatBlockUI statBlockUI;
+    
+    private float fIFramesDuration = 1;
+    private int iNumberOfFlashes = 5;
     
 
 
@@ -26,7 +32,12 @@ public class EnemyController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        
+        
         enemyRb = GetComponent<Rigidbody2D>();
+        cSpriteRenderer = GetComponent<SpriteRenderer>();
         
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerRb = player.GetComponent<Rigidbody2D>();
@@ -34,8 +45,9 @@ public class EnemyController : MonoBehaviour
         
         GameObject statBlockUI = GameObject.FindGameObjectWithTag("StatBlockUI");
         this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
-        
-        
+
+        iDamage = 1;
+
 
     }
 
@@ -98,8 +110,12 @@ public class EnemyController : MonoBehaviour
                 if (playerIsAbove)
                 {
                     Debug.Log("Squash!");
-                    TakeDamage(1);
+                    TakeDamage(iDamage);
                     playerController.Jump();
+                    if (iEnemyHealth > 0)
+                    {
+                        StartCoroutine(Invulnerability());
+                    }
 
                 }
                 else
@@ -125,9 +141,12 @@ public class EnemyController : MonoBehaviour
         }
         statBlockUI.iPointsTotalE--;
         statBlockUI.iPointsLeftE = statBlockUI.iPointsTotalE - statBlockUI.statsE.Sum();
+        
+        gameManagerScript.StatChangeE();
 
+        playerController.bInMenuE = true;
         statBlockUI.UpdateUI();
-            
+        playerController.bInMenuE = false;    
         
 
         // I-frames
@@ -136,7 +155,23 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private IEnumerator Invulnerability()
+    {
+        iDamage = 0;
+        
+        for (int i = 0; i < iNumberOfFlashes; i++)
+        {
+            cSpriteRenderer.color = new Color(1, 0.25f, 0, 0.5f);
+            yield return new WaitForSeconds(fIFramesDuration/iNumberOfFlashes);
+            cSpriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(fIFramesDuration/iNumberOfFlashes);
+        }
+        
+        iDamage = 1;
+    }
+    
 
     
 }
+
 
