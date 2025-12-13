@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Splines.ExtrusionShapes;
 
 public class EnemyController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class EnemyController : MonoBehaviour
     public float fEnemyDir;
     public float fPrevDir;
     public int iDamage;
+    public float cosAngle = 0.70710678118f;
     
     private StatBlockUI statBlockUI;
     
@@ -71,61 +73,61 @@ public class EnemyController : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {  
-            // // alternate jump detector using maths :3
-            // // ((px x ex) + (py + ey))/|p||e| = cosangle
-            // Vector2 enemyPosition = enemyRb.transform.position;
-            // Vector2 relativePlayerPosition = enemyRb.transform.position - playerRb.transform.position;
-            // float enemyMag = enemyPosition.magnitude;
-            // float playerMag = relativePlayerPosition.magnitude;
-            // float magProduct = enemyMag * playerMag;
-            // float playerCosAngle =
-            //     ((relativePlayerPosition.x * enemyPosition.x) + (relativePlayerPosition.y * enemyPosition.y)) /
-            //     magProduct;
-            // if (playerCosAngle <= 0.525)
+            
+            
+            // MATHS CONTENT HERE
+            // ((px x ex) + (py + ey))/|p||e| = cosangle
+            Vector2 toPlayer = playerRb.position - enemyRb.position;
+            float upMag = Vector2.up.magnitude;
+            float toPlayerMag = toPlayer.magnitude;
+            float magProduct = toPlayerMag * upMag;
+            float playerCosAngle =
+                ((toPlayer.x * Vector2.up.x) + (toPlayer.y * Vector2.up.y)) /
+                magProduct;
+            bool bPlayerIsFalling = playerRb.linearVelocity.y <= 0f;
+            
+           
+            if (playerCosAngle > cosAngle && bPlayerIsFalling)
+            {
+                Debug.Log("Squash!");
+                TakeDamage(1);
+                playerController.Jump();
+                if (iEnemyHealth <= 0)
+                {
+                    Destroy(gameObject);
+                }
+            }
+            
+            else if (playerCosAngle < cosAngle || !bPlayerIsFalling)
+            {
+                Debug.Log("Ow!");
+                playerController.TakeDamage(1);
+            }
+            
+            
+            // easier collision detection
+            // ContactPoint2D contact = other.contacts[0];
+            // if (playerRb != null) 
             // {
-            //     Debug.Log("Squash!");
-            //     iEnemyHealth--;
-            //     float fJumpForce = playerController.fJumpForce;
-            //     playerRb.linearVelocity = new Vector2(playerRb.linearVelocity.x, fJumpForce);
-            //     if (iEnemyHealth <= 0)
+            //     bool playerIsAbove = contact.normal.y < -0.5f && playerRb.linearVelocity.y <= 0f;
+            //     if (playerIsAbove)
             //     {
-            //         Destroy(gameObject);
+            //         Debug.Log("Squash!");
+            //         TakeDamage(iDamage);
+            //         playerController.Jump();
+            //         if (iEnemyHealth > 0)
+            //         {
+            //             StartCoroutine(Invulnerability());
+            //         }
+            //
+            //     }
+            //     else
+            //     {
+            //         Debug.Log("Ow!");
+            //         playerController.TakeDamage(1);
             //     }
             // }
             //
-            // else if (playerCosAngle > 0.525)
-            // {
-            //     Debug.Log("Ow!");
-            //     playerController.TakeDamage(1);
-            // }
-            
-            ContactPoint2D contact = other.contacts[0];
-            if (playerRb == null)
-            {
-                
-            }
-
-            else
-            {
-                bool playerIsAbove = contact.normal.y < -0.5f && playerRb.linearVelocity.y <= 0f;
-                if (playerIsAbove)
-                {
-                    Debug.Log("Squash!");
-                    TakeDamage(iDamage);
-                    playerController.Jump();
-                    if (iEnemyHealth > 0)
-                    {
-                        StartCoroutine(Invulnerability());
-                    }
-
-                }
-                else
-                {
-                    Debug.Log("Ow!");
-                    playerController.TakeDamage(1);
-                }
-            }
-            
             
             
 

@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
 
     public void StatChangePHealth()
     {
-        
+        playerController.iPlayerHealth = statBlockUI.statsP[0];
     }
     public void StatChangePSpeed()
     {
