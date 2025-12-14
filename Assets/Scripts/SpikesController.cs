@@ -6,23 +6,46 @@ public class SpikesController : MonoBehaviour
     public Rigidbody2D spikeRb;
     public float fSpikeSpeed;
     public float fSpikeDir;
+    public PlayerController playerController;
+    private bool entityDetected = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spikeRb =  GetComponent<Rigidbody2D>();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (playerController != null)
+        {
+            if (playerController.bInMenu)
+            {
+                spikeRb.constraints = RigidbodyConstraints2D.FreezeAll;
+            }
+            else if (!playerController.bInMenu)
+            {
+                spikeRb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                if (entityDetected)
+                {
+                    spikeRb.linearVelocity = new Vector2(fSpikeSpeed * fSpikeDir, 0);
+                }
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))
         {
+            entityDetected = true;
             spikeRb.linearVelocity = new Vector2(fSpikeSpeed * fSpikeDir, 0);
         }
     }

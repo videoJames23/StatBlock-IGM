@@ -132,9 +132,9 @@ public class GameManager : MonoBehaviour
             switch (statBlockUI.statsE[1]) // enemy speeds
             {
                 case 0: enemyController.fEnemySpeed = 0; break;
-                case 1: enemyController.fEnemySpeed = 3 * enemyController.fEnemyDir; break;
-                case 2: enemyController.fEnemySpeed = 7 * enemyController.fEnemyDir; break;
-                case 3: enemyController.fEnemySpeed = 10 * enemyController.fEnemyDir; break;
+                case 1: enemyController.fEnemySpeed = 3; break;
+                case 2: enemyController.fEnemySpeed = 7; break;
+                case 3: enemyController.fEnemySpeed = 10; break;
             }
         }
     }

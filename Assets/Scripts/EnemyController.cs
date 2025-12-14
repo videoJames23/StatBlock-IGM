@@ -103,40 +103,12 @@ public class EnemyController : MonoBehaviour
                 Debug.Log("Ow!");
                 playerController.TakeDamage(1);
             }
-            
-            
-            // easier collision detection
-            // ContactPoint2D contact = other.contacts[0];
-            // if (playerRb != null) 
-            // {
-            //     bool playerIsAbove = contact.normal.y < -0.5f && playerRb.linearVelocity.y <= 0f;
-            //     if (playerIsAbove)
-            //     {
-            //         Debug.Log("Squash!");
-            //         TakeDamage(iDamage);
-            //         playerController.Jump();
-            //         if (iEnemyHealth > 0)
-            //         {
-            //             StartCoroutine(Invulnerability());
-            //         }
-            //
-            //     }
-            //     else
-            //     {
-            //         Debug.Log("Ow!");
-            //         playerController.TakeDamage(1);
-            //     }
-            // }
-            //
-            
-            
-
         }
 
         if (other.gameObject.CompareTag("Spike"))
         {
             TakeDamage(iDamage);
-            playerController.damageSource.Play();
+            
             fEnemyDir *= -1;
                 
             if (iEnemyHealth > 0)
@@ -147,6 +119,8 @@ public class EnemyController : MonoBehaviour
     }
     void TakeDamage(int damage)
     {
+        playerController.damageSource.Play();
+        
         iEnemyHealth -= damage;
         statBlockUI.statsE[0]--;
         
