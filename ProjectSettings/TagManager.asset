@@ -23,6 +23,12 @@ TagManager:
   - Lever
   - Gate
   - Trigger
+  - StatBlockText
+  - ControlsText
+  - HealthText
+  - JumpText
+  - SpeedText
+  - Instruction Manager
   layers:
   - Default
   - TransparentFX

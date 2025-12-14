@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     
     private StatBlockUI statBlockUI;
     private GameManager gameManagerScript;
+    private InstructionManager instructionManagerScript;
     private EnemyController enemyController;
     private SpriteRenderer cSpriteRenderer;
     
@@ -66,7 +67,12 @@ public class PlayerController : MonoBehaviour
         {
             audioSource = completionAudio.GetComponent<AudioSource>();
         }
-
+        
+        GameObject instructionManager = GameObject.FindGameObjectWithTag("Instruction Manager");
+        if (instructionManager != null)
+        {
+            instructionManagerScript = instructionManager.GetComponent<InstructionManager>();
+        }
         
         
         Physics2D.IgnoreLayerCollision(10, 11, false);
@@ -134,6 +140,28 @@ public class PlayerController : MonoBehaviour
             audioSource.Play();
             yield return new WaitForSeconds(4);
             gameManagerScript.LoadScene();
+        }
+        else if (other.gameObject.CompareTag("ControlsText"))
+        {
+            instructionManagerScript.StartFadeIn("controls");
+            instructionManagerScript.FadeOut("health");
+        }
+        else if (other.gameObject.CompareTag("HealthText"))
+        {
+            instructionManagerScript.FadeOut("controls");
+            instructionManagerScript.StartFadeIn("health");
+            instructionManagerScript.FadeOut("jump");
+        }
+        else if (other.gameObject.CompareTag("JumpText"))
+        {
+            instructionManagerScript.FadeOut("health");
+            instructionManagerScript.StartFadeIn("jump");
+            instructionManagerScript.FadeOut("speed");
+        }
+        else if (other.gameObject.CompareTag("SpeedText"))
+        {
+            instructionManagerScript.FadeOut("jump");
+            instructionManagerScript.StartFadeIn("speed");
         }
         
     }

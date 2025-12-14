@@ -72,17 +72,8 @@ public class StatBlockUI : MonoBehaviour
             showHideS.Hide();
             
         }
+        UIPosition = holderRT.anchoredPosition;
         
-        Debug.Log(gameManagerScript.buildIndex);
-        if (gameManagerScript.buildIndex == 3)
-        {
-            UIPosition = new Vector2(115, 63f);
-        }
-        else if  (gameManagerScript.buildIndex != 3)
-        {
-            UIPosition = new Vector2(-409.7f, 192.1f);
-        }
-        holderRT.anchoredPosition = UIPosition;
 
 
 
@@ -284,7 +275,6 @@ public class StatBlockUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        Debug.Log("UpdateUI buildIndex = " + gameManagerScript.buildIndex);
         
         iPointsLeftP = iPointsTotalP - statsP.Sum();
         iPointsLeftE = iPointsTotalE - statsE.Sum();
@@ -293,13 +283,12 @@ public class StatBlockUI : MonoBehaviour
         {
                 holderRT.anchoredPosition = new Vector2(-87.6f, -74.2f);
                 holderRT.localScale = new Vector3(3f, 3f, 3f);
-                background.GetComponent<RectTransform>().localScale = new Vector3(4.42999983f, 2.30865788f, 1f);
+                background.GetComponent<RectTransform>().localScale = new Vector3(10, 10, 10);
             
         }
         else if (!playerController.bInMenu)
         {
             holderRT.anchoredPosition = UIPosition;
-                
             holderRT.localScale = new Vector3(1f, 1f, 1f);
             background.GetComponent<RectTransform>().localScale = new Vector3(2.82999992f,2.30865788f,1f);
         }
@@ -345,7 +334,6 @@ public class StatBlockUI : MonoBehaviour
                 valueTexts[4].text = sUser;
             }
         }
-        Debug.Log("UIPosition = " + UIPosition);
-        Debug.Log("Applying Position = " + holderRT.anchoredPosition);
+        
     }
 }

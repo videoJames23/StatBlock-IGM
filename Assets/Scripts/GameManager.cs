@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour
    
     void Start()
     {
-
-        
-        
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerRb = player.GetComponent<Rigidbody2D>();
         playerController = player.GetComponent<PlayerController>();

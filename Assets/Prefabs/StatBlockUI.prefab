@@ -691,8 +691,8 @@ MonoBehaviour:
   - {fileID: 5654618725045004365}
   - {fileID: 5445885438135700974}
   - {fileID: 750530754885650575}
-  statsP: 010000000100000001000000
-  statsE: 010000000200000003000000
+  statsP: 030000000100000002000000
+  statsE: 030000000000000003000000
   playerController: {fileID: 0}
   enemyController: {fileID: 0}
   gameManagerScript: {fileID: 0}
@@ -700,11 +700,12 @@ MonoBehaviour:
   background: {fileID: 1399443520318355992}
   showHideJ: {fileID: 5247032621137200694}
   showHideS: {fileID: 2569729562222940473}
-  iPointsTotalP: 5
-  iPointsLeftP: 2
+  iPointsTotalP: 6
+  iPointsLeftP: 0
   iPointsTotalE: 6
   iPointsLeftE: 0
   sUser: 
+  prevSize: 0
 --- !u!223 &5752956506425552972
 Canvas:
   m_ObjectHideFlags: 0
@@ -776,7 +777,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5831489033091506738}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0.83
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
