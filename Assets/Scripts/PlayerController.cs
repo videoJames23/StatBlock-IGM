@@ -246,23 +246,26 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(4);
             gameManagerScript.LoadScene();
         }
-        else if (other.gameObject.CompareTag("Text1"))
+        else if (instructionManagerScript != null)
         {
-            instructionManagerScript.StartFadeIn("text1");
+            if (other.gameObject.CompareTag("Text1"))
+            {
+                instructionManagerScript.StartFadeIn("text1");
+            }
+            else if (other.gameObject.CompareTag("Text2"))
+            {
+                instructionManagerScript.StartFadeIn("text2");
+            }
+            else if (other.gameObject.CompareTag("Text3"))
+            {
+                instructionManagerScript.StartFadeIn("text3");
+            }
+            else if (other.gameObject.CompareTag("Text4"))
+            {
+                instructionManagerScript.StartFadeIn("text4");
+            }
         }
-        else if (other.gameObject.CompareTag("Text2"))
-        {
-            instructionManagerScript.StartFadeIn("text2");
-        }
-        else if (other.gameObject.CompareTag("Text3"))
-        {
-            instructionManagerScript.StartFadeIn("text3");
-        }
-        else if (other.gameObject.CompareTag("Text4"))
-        {
-            instructionManagerScript.StartFadeIn("text4");
-        }
-        
+
     }
     void OnCollisionStay2D(Collision2D other)
     {
@@ -306,24 +309,26 @@ public class PlayerController : MonoBehaviour
         {
             bIsTouchingStatBlockE = false;
         }
-        
-        else if (other.gameObject.CompareTag("Text1"))
+        else if (instructionManagerScript != null)
         {
-            instructionManagerScript.StartFadeOut("text1");
+            if (other.gameObject.CompareTag("Text1"))
+            {
+                instructionManagerScript.StartFadeOut("text1");
+            }
+            else if (other.gameObject.CompareTag("Text2"))
+            {
+                instructionManagerScript.StartFadeOut("text2");
+            }
+            else if (other.gameObject.CompareTag("Text3"))
+            {
+                instructionManagerScript.StartFadeOut("text3");
+            }
+            else if (other.gameObject.CompareTag("Text4"))
+            {
+                instructionManagerScript.StartFadeOut("text4");
+            }
         }
-        else if (other.gameObject.CompareTag("Text2"))
-        {
-            instructionManagerScript.StartFadeOut("text2");
-        }
-        else if (other.gameObject.CompareTag("Text3"))
-        {
-            instructionManagerScript.StartFadeOut("text3");
-        }
-        else if (other.gameObject.CompareTag("Text4"))
-        {
-            instructionManagerScript.StartFadeOut("text4");
-        }
-        
+
     }
     
 
