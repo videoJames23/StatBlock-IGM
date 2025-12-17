@@ -1,0 +1,13 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/MainMenuStyleSheet.uss?fileID=7433441132597879392&amp;guid=f95fa6a26d1855c4588128cbf20932ba&amp;type=3#MainMenuStyleSheet" />
+    <ui:VisualElement name="panel-container" enabled="true" style="flex-grow: 1; background-color: rgb(255, 255, 255); opacity: 1;">
+        <ui:VisualElement name="center-panel" class="centerPanel" style="flex-grow: 1; -unity-text-align: upper-left; width: 567px; height: 93%; align-items: center; justify-content: flex-end; align-self: center; align-content: flex-end;">
+            <ui:VisualElement name="center-panel" class="centerPanel" style="align-self: center; justify-content: space-evenly;">
+                <ui:Label text="StatBlock" name="headline__label" style="-unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); font-size: 55px; text-shadow: 2px 2px 0 rgb(255, 255, 255); -unity-text-align: upper-center; -unity-font-style: bold;" />
+                <ui:Button text="Start" name="start__button" class="menuRegularButton" style="justify-content: flex-start; align-self: center;" />
+                <ui:Button text="Level Select" name="level__select__button" class="menuRegularButton" style="align-self: center;" />
+                <ui:Button text="Credits&#10;" name="credits__button" class="menuRegularButton" style="align-self: center;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

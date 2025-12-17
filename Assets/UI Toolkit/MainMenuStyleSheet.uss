@@ -1,0 +1,25 @@
+:root {
+}
+
+.menuRegularButton {
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&guid=8a2b9e2a607dd2143b58c44bc32410b4&type=3#Electronic Highway Sign");
+    font-size: 41px;
+    -unity-text-align: upper-center;
+    text-shadow: 2px 2px 0 rgb(255, 255, 255);
+    text-overflow: clip;
+    -unity-font-style: bold;
+    width: 370px;
+    height: 93px;
+    visibility: visible;
+}
+
+.centerPanel {
+    width: 567px;
+    height: 100%;
+}
+
+.menuRegularButton:hover {
+    scale: 1.05 1.05;
+    transition-duration: 0.1s;
+    -unity-text-align: upper-center;
+}

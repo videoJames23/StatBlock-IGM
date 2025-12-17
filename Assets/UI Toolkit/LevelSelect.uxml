@@ -1,0 +1,15 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyleSheet.uss?fileID=7433441132597879392&amp;guid=f95fa6a26d1855c4588128cbf20932ba&amp;type=3#MainMenuStyleSheet" />
+    <ui:VisualElement name="panel-container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
+        <ui:Button text="Back" name="back__button" emoji-fallback-support="true" class="menuRegularButton" style="-unity-text-align: middle-left; background-size: 100px 100px; width: 6%; height: 5%; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); font-size: 34px; -unity-font-style: bold;" />
+        <ui:VisualElement name="center-panel" class="centerPanel" style="flex-grow: 1; align-items: center; align-self: center; align-content: center; justify-content: space-evenly;">
+            <ui:Label text="Level Select" name="level__select__label" style="-unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); font-size: 55px; -unity-font-style: bold;" />
+            <ui:Button text="Tutorial 1" name="tutorial__button" class="menuRegularButton" />
+            <ui:Button text="Tutorial 2" name="tutorial__enemy__button" class="menuRegularButton" />
+            <ui:Button text="1" name="level__1__button" class="menuRegularButton" />
+            <ui:Button text="2" name="level__2__button" class="menuRegularButton" />
+            <ui:Button text="3" name="level__3__button" class="menuRegularButton" />
+            <ui:Button text="4" name="level__4__button" class="menuRegularButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
