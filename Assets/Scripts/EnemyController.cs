@@ -121,15 +121,14 @@ public class EnemyController : MonoBehaviour
     {
         playerController.damageSource.Play();
         
-        iEnemyHealth -= damage;
-        statBlockUI.statsE[0]--;
+        statBlockUI.statsE[0] -= damage;
         
         if (statBlockUI.iPointsLeftE > 0)
         {
             statBlockUI.iPointsLeftE--;
         }
+        
         statBlockUI.iPointsTotalE--;
-        statBlockUI.iPointsLeftE = statBlockUI.iPointsTotalE - statBlockUI.statsE.Sum();
         
         gameManagerScript.StatChangeEHealth();
 

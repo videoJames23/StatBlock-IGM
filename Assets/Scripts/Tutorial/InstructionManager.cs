@@ -20,6 +20,7 @@ public class InstructionManager : MonoBehaviour
         text2 = GameObject.FindGameObjectWithTag("Text2");
         text3 = GameObject.FindGameObjectWithTag("Text3");
         text4 = GameObject.FindGameObjectWithTag("Text4");
+        
 
         if (text1 != null)
         {
@@ -42,7 +43,7 @@ public class InstructionManager : MonoBehaviour
         }
         
     }
-
+    
     public void StartFadeIn(string area)
     {
         

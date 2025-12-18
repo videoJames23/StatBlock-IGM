@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     private StatBlockUI statBlockUI;
     private GameManager gameManagerScript;
     private InstructionManager instructionManagerScript;
-    private EnemyController enemyController;
     private SpriteRenderer cSpriteRenderer;
     
     private AudioSource completionSource;
@@ -53,24 +52,12 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody2D>();
         cSpriteRenderer = GetComponent<SpriteRenderer>();
         
-        GameObject statBlockUI = GameObject.FindGameObjectWithTag("StatBlockUI");
-        this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
-        
-        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-        if (enemy != null)
-        {
-            enemyController = enemy.GetComponent<EnemyController>();
-        }
-        
-        
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         
-        GameObject completionAudio = GameObject.FindGameObjectWithTag("Completion Audio");
-        if (completionAudio != null)
-        {
-            completionSource = completionAudio.GetComponent<AudioSource>();
-        }
+        GameObject statBlockUI = GameObject.FindGameObjectWithTag("StatBlockUI");
+        this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
+        
         GameObject jumpAudio = GameObject.Find("Jump");
         if (jumpAudio != null)
         {
@@ -83,17 +70,12 @@ public class PlayerController : MonoBehaviour
             damageSource = damageAudio.GetComponent<AudioSource>();
         }
         
-        GameObject openAudio = GameObject.Find("Open");
-        if (openAudio != null)
+        GameObject completionAudio = GameObject.FindGameObjectWithTag("Completion Audio");
+        if (completionAudio != null)
         {
-            openSource = openAudio.GetComponent<AudioSource>();
+            completionSource = completionAudio.GetComponent<AudioSource>();
         }
         
-        GameObject closeAudio = GameObject.Find("Close");
-        if (closeAudio != null)
-        {
-            closeSource = closeAudio.GetComponent<AudioSource>();
-        }
         
         GameObject instructionManager = GameObject.FindGameObjectWithTag("Instruction Manager");
         if (instructionManager != null)
@@ -109,51 +91,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (bIsTouchingStatBlockP && Input.GetKeyDown(KeyCode.E))
-        {
-            bInMenuP = !bInMenuP;
-            if (bInMenuP)
-            {
-                openSource.Play();
-            }
-            else if (!bInMenuP)
-            {
-                closeSource.Play();
-            }
-            MenuChecks();
-        }
-        
-        if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && !bInMenuE)
-        {
-            bInMenuE = true;
-            openSource.Play();
-            enemyController.fPrevDir = enemyController.fEnemyDir;
-            MenuChecks();
-        }
-        
-        else if (bIsTouchingStatBlockE && Input.GetKeyDown(KeyCode.E) && bInMenuE && statBlockUI.iPointsLeftE == 0)
-        {
-            bInMenuE = false;
-            closeSource.Play();
-            enemyController.fEnemyDir = enemyController.fPrevDir;
-            MenuChecks();
-        }
-        
-        
-        
-        
-            
-    
-        
         playerRb.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * fPlayerSpeed, playerRb.linearVelocity.y);
         
-        iPlayerHealth = statBlockUI.statsP[0];
         
-        if (Input.GetKeyDown("space") && bIsGrounded)
+        if (Input.GetKeyDown(KeyCode.W) && bIsGrounded && !bInMenu)
         {
             Jump();
+        
         }
-
+        
     }
 
     public void Jump()
@@ -163,19 +109,7 @@ public class PlayerController : MonoBehaviour
     }
     
 
-    void MenuChecks()
-    {
-        if (bInMenuP || bInMenuE)
-        {
-            bInMenu = true;
-        }
-        
-        else if (!bInMenuP && !bInMenuE)
-        {
-            bInMenu = false;
-        }
-        statBlockUI.UpdateUI();
-    }
+    
     
     
     // Damage/I-Frames
@@ -190,11 +124,8 @@ public class PlayerController : MonoBehaviour
         
         damageSource.Play();
         
-        iPlayerHealth -= damage;
-        statBlockUI.statsP[0]--;
-            
+        statBlockUI.statsP[0] -= damage;
         statBlockUI.iPointsTotalP--;
-        statBlockUI.iPointsLeftP = statBlockUI.iPointsTotalP - statBlockUI.statsP.Sum();
             
         gameManagerScript.StatChangePHealth();
         bInMenuP = true;

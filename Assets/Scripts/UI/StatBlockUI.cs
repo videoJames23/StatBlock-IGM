@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using TMPro;
@@ -144,10 +145,10 @@ public class StatBlockUI : MonoBehaviour
                 // change value
                 if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
                 {
+                    upSource.Play();
                     if (playerController.bInMenuP && iPointsLeftP > 0)
                     {
                         statsP[selectedIndex]++;
-                        upSource.Play();
 
                         if (statsP[selectedIndex] > 3)
                         {
@@ -177,7 +178,7 @@ public class StatBlockUI : MonoBehaviour
                         }
                         
                         statsE[selectedIndex]++;
-                        upSource.Play();
+                        
                         
                         
                         
@@ -207,10 +208,10 @@ public class StatBlockUI : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
                 {
+                    downSource.Play();
                     if (playerController.bInMenuP)
                     {
                         statsP[selectedIndex]--;
-                        downSource.Play();
                         
                         if (statsP[0] < 1)
                         {
@@ -246,9 +247,9 @@ public class StatBlockUI : MonoBehaviour
                         {
                             prevSize = statsE[2];
                         }
-                        statsE[selectedIndex]--;
-                        downSource.Play();
 
+                        statsE[selectedIndex]--;
+                        
                         if (statsE[0] < 1)
                         {
                             statsE[0] = 1;
@@ -293,6 +294,7 @@ public class StatBlockUI : MonoBehaviour
         holder.SetActive(true);
         iPointsLeftP = iPointsTotalP - statsP.Sum();
         iPointsLeftE = iPointsTotalE - statsE.Sum();
+        
         
         if (playerController.bInMenu)
         {
