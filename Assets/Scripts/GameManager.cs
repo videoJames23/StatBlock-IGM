@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     private Rigidbody2D enemyRb;
     private EnemyController enemyController;
     private StatBlockUI statBlockUI;
-    public int buildIndex;
+    [FormerlySerializedAs("buildIndex")] public int iBuildIndex;
     
     private AudioSource completionSource;
     private AudioSource jumpSource;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
         GameObject statBlockUI = GameObject.FindGameObjectWithTag("StatBlockUI");
         this.statBlockUI = statBlockUI.GetComponent<StatBlockUI>();
         
-        buildIndex = SceneManager.GetActiveScene().buildIndex;
+        iBuildIndex = SceneManager.GetActiveScene().buildIndex;
         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
         if (enemy != null)
         {
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(buildIndex);
+            SceneManager.LoadScene(iBuildIndex);
         }
         if (playerController.bIsTouchingStatBlockP && Input.GetKeyDown(KeyCode.E))
         {
@@ -206,7 +207,7 @@ public class GameManager : MonoBehaviour
                 // If enemy grows into wall, movement stops
                 case 1:
                     enemyController.fEnemySize = 1.5f;
-                    if (statBlockUI.prevSize != 1)
+                    if (statBlockUI.iPrevSize != 1)
                     {
                         enemyRb.position = new Vector2(enemyRb.position.x, enemyRb.position.y - 0.81f);
                     }
@@ -214,7 +215,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case 2:
                     
-                    switch (statBlockUI.prevSize)
+                    switch (statBlockUI.iPrevSize)
                     {
                         case 1:
                             enemyRb.position = new Vector2(enemyRb.position.x, enemyRb.position.y + 0.81f);
@@ -228,7 +229,7 @@ public class GameManager : MonoBehaviour
 
                     break;
                 case 3:
-                    if (statBlockUI.prevSize != 3)
+                    if (statBlockUI.iPrevSize != 3)
                     {
                         enemyRb.position = new Vector2(enemyRb.position.x, enemyRb.position.y + 0.726443f);
                         enemyController.fEnemySize = 4.5f;
@@ -241,7 +242,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene()
     {
-        SceneManager.LoadScene(buildIndex + 1);
+        SceneManager.LoadScene(iBuildIndex + 1);
     }
 
 

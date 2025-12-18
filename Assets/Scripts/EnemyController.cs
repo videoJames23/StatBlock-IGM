@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Splines.ExtrusionShapes;
 
 public class EnemyController : MonoBehaviour
@@ -22,7 +23,7 @@ public class EnemyController : MonoBehaviour
     public float fEnemyDir;
     public float fPrevDir;
     public int iDamage;
-    public float cosAngle = 0.70710678118f;
+    [FormerlySerializedAs("cosAngle")] public float fCosAngle = 0.70710678118f;
     
     private StatBlockUI statBlockUI;
     
@@ -87,7 +88,7 @@ public class EnemyController : MonoBehaviour
             bool bPlayerIsFalling = playerRb.linearVelocity.y <= 0f;
             
            
-            if (playerCosAngle > cosAngle && bPlayerIsFalling)
+            if (playerCosAngle > fCosAngle && bPlayerIsFalling)
             {
                 Debug.Log("Squash!");
                 TakeDamage(1);
@@ -98,7 +99,7 @@ public class EnemyController : MonoBehaviour
                 }
             }
             
-            else if (playerCosAngle < cosAngle || !bPlayerIsFalling)
+            else if (playerCosAngle < fCosAngle || !bPlayerIsFalling)
             {
                 Debug.Log("Ow!");
                 playerController.TakeDamage(1);

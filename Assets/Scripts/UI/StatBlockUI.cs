@@ -15,7 +15,6 @@ public class StatBlockUI : MonoBehaviour
     private int selectedIndex;
     
     public PlayerController playerController;
-    public EnemyController enemyController;
     public GameManager gameManagerScript;
 
     public GameObject holder;
@@ -33,7 +32,7 @@ public class StatBlockUI : MonoBehaviour
     public int iPointsTotalE;
     public int iPointsLeftE;
     public string sUser;
-    public int prevSize;
+    [FormerlySerializedAs("prevSize")] public int iPrevSize;
 
     private AudioSource indexSource;
     private AudioSource upSource;
@@ -46,11 +45,6 @@ public class StatBlockUI : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
         
-        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-        if (enemy != null)
-        {
-            enemyController = enemy.GetComponent<EnemyController>();
-        }
         
         
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
@@ -174,7 +168,7 @@ public class StatBlockUI : MonoBehaviour
                         
                         if (selectedIndex == 2)
                         {
-                            prevSize = statsE[2];
+                            iPrevSize = statsE[2];
                         }
                         
                         statsE[selectedIndex]++;
@@ -245,7 +239,7 @@ public class StatBlockUI : MonoBehaviour
                         
                         if (selectedIndex == 2)
                         {
-                            prevSize = statsE[2];
+                            iPrevSize = statsE[2];
                         }
 
                         statsE[selectedIndex]--;

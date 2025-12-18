@@ -7,7 +7,7 @@ public class SpikesController : MonoBehaviour
     public float fSpikeSpeed;
     public float fSpikeDir;
     public PlayerController playerController;
-    private bool entityDetected = false;
+    private bool bEntityDetected = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,7 +33,7 @@ public class SpikesController : MonoBehaviour
             else if (!playerController.bInMenu)
             {
                 spikeRb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-                if (entityDetected)
+                if (bEntityDetected)
                 {
                     spikeRb.linearVelocity = new Vector2(fSpikeSpeed * fSpikeDir, 0);
                 }
@@ -45,7 +45,7 @@ public class SpikesController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))
         {
-            entityDetected = true;
+            bEntityDetected = true;
             spikeRb.linearVelocity = new Vector2(fSpikeSpeed * fSpikeDir, 0);
         }
     }
